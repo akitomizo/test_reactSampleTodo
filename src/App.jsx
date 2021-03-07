@@ -2,6 +2,8 @@ import { React } from "react";
 import react, { useState } from "react";
 import "./styles.css";
 import { InputTodo } from "./components/InputTodo";
+import { InCompleteTodo } from "./components/InCompleteTodo";
+import { CompleteTodo } from "./components/CompleteTodo";
 
 export const App = () => {
   const [todoText, setTodoText] = useState("");
@@ -40,36 +42,17 @@ export const App = () => {
         todoText={todoText}
         onChange={onChangeTodoText}
         onClick={onClickAdd}
+        disabled={incompleteTodos.length >= 5}
       />
-      <div className="incomplete-area">
-        <p className="title">INCOMPLETE LIST</p>
-        <ul>
-          {incompleteTodos.map((todo, index) => {
-            return (
-              <div key={todo} className="list-row">
-                <li>{todo}</li>
-                <button onClick={() => onClickComp(index)}>COMPLETE!</button>
-                <button onClick={() => onClickDelete(index)}>DELETE!</button>
-              </div>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="complete-area">
-        <p className="title">COMPLETE LIST</p>
-        <div className="list-row">
-          <ul>
-            {completeTodos.map((todo, index) => {
-              return (
-                <div key={todo} className="list-row">
-                  <li>{todo}</li>
-                  <button onClick={() => onClickRedo(index)}>REDO</button>
-                </div>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
+      {incompleteTodos.length >= 5 && (
+        <p style={{ color: "red" }}>MAX 5: IMCOMPLETE TODO</p>
+      )}
+      <InCompleteTodo
+        incompleteTodos={incompleteTodos}
+        onClickComp={onClickComp}
+        onClickDelete={onClickDelete}
+      />
+      <CompleteTodo completeTodos={completeTodos} onClickRedo={onClickRedo} />
     </>
   );
 };
